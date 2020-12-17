@@ -13,12 +13,23 @@ class adminController extends ResourceController
 	public function regisAdmin()
 	{
     $post = $this->request->getVar();
-    // echo $post;
-    // $data['username'] = $post['username'];
-    // $data['password'] = $post['password'];
-    // $register = $this->adminModel->postRegister($data);
-    // return $this->respond(["data" => $register], 200);
-    return $this->respond(["data" => $post], 200);
+    $text = array_merge(range('0','9'), range('A','Z'));
+    $str = implode($text);
+    $random = str_shuffle($str);
+    $adminKey = substr($random,0,5);
+    $data = [
+      'username' => $post['username'],
+      'password' => $post['password'],
+      'admin_key' => $adminKey,
+    ];
+    $return = $this->adminModel->postRegister($data);
+    if ($return) {
+      return $this->respond(["data" => "Registrasi Berhasil", "Return" => $return], 200);
+    }
+    else {
+      return $this->respond(["data" => "Registrasi Gagal" , "Return" => $return], 200);
+    }
+    // return $this->respond(["data" => $return], 200);
     // echo "Hello World";
 	}
 
