@@ -4,6 +4,7 @@ use CodeIgniter\Model;
 class adminModel extends Model
 {
   protected $table = 'admin';
+  protected $primaryKey = 'id_admin';
   // protected $allowedFields = ['username', 'password', 'admin_key'];
 
   function __construct()

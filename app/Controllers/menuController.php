@@ -12,12 +12,11 @@ class menuController extends ResourceController
 
 	public function getmenudata()
 	{
-    // $post = $this->request->getPost();
     $menuData = $this->menuModel->reqMenu();
     $data = [
       'menu' => $menuData,
     ];
-    return $this->respond(["data" => $menuData], 200);
+    return $this->respond(["data" => $data], 200);
     // echo "Hello World";
 	}
 
