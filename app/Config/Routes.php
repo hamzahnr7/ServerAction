@@ -33,6 +33,10 @@ $routes->setAutoRoute(true);
 $routes->get('/', 'Home::index');
 $routes->get('/daftarmenu', 'menuController::getmenudata');
 $routes->post('/regisAdmin', 'adminController::regisAdmin');
+$routes->post('/loginAdmin', 'adminController::LoginAdmin');
+$routes->post('/getAdmin', 'adminController::getData');
+$routes->post('/adminKey', 'adminController::adminKey');
+$routes->post('/userlogin', 'userController::userlogin');
 
 /**
  * --------------------------------------------------------------------

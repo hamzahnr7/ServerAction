@@ -14,6 +14,6 @@ class menuModel extends Model
 
   public function reqMenu()
   {
-    return $this->db->query("SELECT * FROM menu")->getResultArray();
+    return $this->dt->select('*')->getResultArray();
   }
 }

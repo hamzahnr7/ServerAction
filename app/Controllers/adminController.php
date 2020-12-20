@@ -10,6 +10,26 @@ class adminController extends ResourceController
     $this->adminModel = new adminModel();
   }
 
+  public function getData()
+  {
+    $postID = $this->request->getVar('id');
+    $data = $this->adminModel->getData($postID);
+    $data = [
+      'data' => $data
+    ];
+    return $this->respond($data, 200);
+  }
+
+  public function adminKey()
+  {
+    $key = $this->request->getVar('admin_key');
+    $data = $this->adminModel->cek_admin_key($key);
+    $data = [
+      'data' => $data
+    ];
+    return $this->respond($data, 200);
+  }
+
 	public function regisAdmin()
 	{
     $post = $this->request->getVar();
@@ -17,21 +37,51 @@ class adminController extends ResourceController
     $str = implode($text);
     $random = str_shuffle($str);
     $adminKey = substr($random,0,5);
-    $data = [
-      'username' => $post['username'],
-      'password' => $post['password'],
-      'admin_key' => $adminKey,
-    ];
-    $return = $this->adminModel->postRegister($data);
-    if ($return) {
-      return $this->respond(["data" => "Registrasi Berhasil", "Return" => $return], 200);
+    $valid = $this->adminModel->cekUsername($post['username']);
+    if (!$valid) {
+      $data = [
+        'username' => $post['username'],
+        'password' => $post['password'],
+        'admin_key' => $adminKey,
+      ];
+      return $this->respond($data, 200);
+      $return = $this->adminModel->postRegister($data);
+      if ($return) {
+        $data = [
+          'Login' => true,
+          'ID' => $return,
+        ];
+        return $this->respond($data, 200);
+      }
+      else {
+        $data = [
+          'status' => 'Login Gagal',
+        ];
+        return $this->respond($data, 200);
+      }
     }
     else {
-      return $this->respond(["data" => "Registrasi Gagal" , "Return" => $return], 200);
+      $data = [
+        'status' => 'Username Sudah Ada',
+      ];
+      return $this->respond($data, 200);
     }
-    // return $this->respond(["data" => $return], 200);
-    // echo "Hello World";
 	}
+
+  public function LoginAdmin()
+  {
+    $postData = $this->request->getVar();
+    $user = $postData['username'];
+    $pass = $postData['password'];
+    $login = $this->adminModel->loginAdmin($user, $pass);
+    if ($login) {
+      $data = [
+        'status' => $login,
+      ];
+      return $this->respond($data, 200);
+    }
+    return $this->respond('Login Gagal', 200);
+  }
 
 	//--------------------------------------------------------------------
 
